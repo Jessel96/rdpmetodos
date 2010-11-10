@@ -64,7 +64,7 @@ public class AreaDibujo extends javax.swing.JPanel{
         if(this.click==0){
             this.punto_x=e.getX();
             this.punto_y=e.getY();
-            String respuesta=(String)JOptionPane.showInputDialog(this,"Ingrese el numero de marcas:",JOptionPane.QUESTION_MESSAGE);
+            String respuesta=(String)JOptionPane.showInputDialog(this,"Ingrese el numero de marcas:");
             if(respuesta!=null){
                 this.confirm=true;
                 this.redpetri.agregarPlaza(Integer.parseInt(respuesta),this.punto_x,this.punto_y);
@@ -76,16 +76,14 @@ public class AreaDibujo extends javax.swing.JPanel{
                 this.confirm=true;
                 this.redpetri.agregarTransicion(this.punto_x,this.punto_y);
             }
-            else{
-                if(this.click==2){
-                }
-            }
         }
 
         repaint();
     }
     private void formMousePressed(MouseEvent e) {
         if(this.click==3){
+            this.punto_x=e.getX();
+            this.punto_y=e.getY();
             this.opcion_click(-1);//boton no presionado
         }
     }
