@@ -22,10 +22,4 @@ public class Posicion {
     public int getY() {
         return y;
     }
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
-    
 }
