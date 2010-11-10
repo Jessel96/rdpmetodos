@@ -14,6 +14,7 @@ public class RDP {
                                 //(guarda posXYPlaza en cada posicion)    
     private ArrayList <Posicion>posTransicion=new ArrayList<Posicion>(0); //posiciones de las transiciones de n_transiciones x 2
                                     //(guarda posXYTransicion en cada posicion)
+    private ArrayList <Arco> arcos=new ArrayList<Arco>(0);
 
     public RDP(){
     }
