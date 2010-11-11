@@ -15,6 +15,7 @@ public class Frame extends JFrame{
     JButton arco = new JButton("Arco");
     JButton paso = new JButton("Paso a Paso");
     JButton matrices = new JButton("Generar Matrices");
+    JTextArea jta = new JTextArea("PROBANDOA");
 
      public Frame() {
 
@@ -70,6 +71,8 @@ public class Frame extends JFrame{
             }
         });
 
+        jta.setEditable(false);
+        jta.setSize(250, 250);
         p1.setLayout(new FlowLayout());
 
         p1.add(plaza);
@@ -79,6 +82,8 @@ public class Frame extends JFrame{
         p1.add(matrices);
         add(p1);
         add(ad);
+        add(jta);
+
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 	setTitle("Red de Petri");
