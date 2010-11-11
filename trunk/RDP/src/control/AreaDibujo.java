@@ -2,12 +2,8 @@ package control;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.TextField;
 import java.awt.event.*;
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
 import modelo.Posicion;
 import modelo.RDP;
 
@@ -28,9 +24,13 @@ public class AreaDibujo extends javax.swing.JPanel{
         this.click=a;
     }
 
+    public RDP retornarRed(){
+        return this.redpetri;
+    }
+
 
     private void initComponents() {
-        setPreferredSize(new java.awt.Dimension(750, 500));
+        setPreferredSize(new java.awt.Dimension(700, 500));
         setBackground(Color.white);
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             @Override
