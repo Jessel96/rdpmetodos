@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class RDP {
 
+    final int ancho1=50,alto1=50,ancho2=50,alto2=60;
     private int pre[][]; //matriz pre plazas a transiciones(plazas x transiciones)
     private int post[][]; //matriz pre transiciones a plazas(plazas x transiciones)
 
@@ -38,7 +39,6 @@ public class RDP {
         return (plazas.get(pos));
     }
 
-
     public void agregarTransicion(int x,int y){
         Posicion p = new Posicion(x,y);
         this.posTransicion.add(p);
@@ -47,9 +47,88 @@ public class RDP {
     public int numTransiciones(){
         return posTransicion.size();
     }
+
     public Posicion getPosTransicion(int pos){
         return (Posicion)this.posTransicion.get(pos);
     }
 
+    public void agregarArco(int indicePlaza,int indiceTransicion,boolean preOPost,int peso){
+        Arco a=new Arco(indicePlaza,indiceTransicion,preOPost,peso);
+        
+        this.arcos.add(a);
+    }
 
-}
+    public int numArcos(){
+        return this.arcos.size();
+    }
+
+    public int getIndicePlaza(int nArco){
+        return arcos.get(nArco).getPlaza();//desde el arraylist arcos rescato el arco correspondiente al que va i
+                                          //retorna un tipo arco y a ese le extraigo el indice de la plaza a la que apunta
+    }
+    public int getIndiceTransicion(int ntrans){
+        return arcos.get(ntrans).getTransicion();
+    }
+    public int getPesoArco(int inArco){
+        return arcos.get(inArco).getPeso();//arcos.get(inArco) devuelve el arco
+    }
+
+    public boolean verificarPosicion(int x, int y){
+        int i=0;
+        Posicion p=new Posicion();
+
+        while(i<this.posPlaza.size()){
+            p=this.getPosPlaza(i);
+            if(x>p.getX()-this.ancho1 && x<p.getX()+this.ancho1 && y>p.getY()-this.alto1 && y<p.getY()+this.alto1){
+                return false;
+            }
+            else{
+                i++;
+            }
+        }
+        i=0;
+        while(i<this.posTransicion.size()){
+            p=this.getPosTransicion(i);
+            if(x>p.getX()-this.ancho2 && x<p.getX()+this.ancho2 && y>p.getY()-this.alto2 && y<p.getY()+this.alto2){
+                return false;
+            }
+            else{
+                i++;
+            }
+        }
+        return true;
+    
+    }
+
+    public int verificaArcoPlaza(int x, int y){
+        int i=0;
+        Posicion p=new Posicion();
+
+        while(i<this.posPlaza.size()){
+            p=this.getPosPlaza(i);
+            if(x>p.getX() && x<p.getX()+50 && y>p.getY() && y<p.getY()+50){
+                return i;
+            }
+            else{
+                i++;
+            }
+        }
+        return -1;
+    }
+
+    public int verificaArcoTransicion(int x,int y){
+        int i=0;
+        Posicion p=new Posicion();
+        while(i<this.posTransicion.size()){
+            p=this.getPosTransicion(i);
+            if(x>p.getX() && x<p.getX()+9 && y>p.getY() && y<p.getY()+30){
+                return i;
+            }
+            else{
+                i++;
+            }
+        }
+        return -1;
+    }
+
+}//Fin Clase RDP
