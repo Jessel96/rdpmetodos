@@ -1,6 +1,7 @@
 package control;
 
 import control.AreaDibujo;
+import control.AreaConsola;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,8 +16,8 @@ public class Frame extends JFrame{
     JButton arco = new JButton("Arco");
     JButton paso = new JButton("Paso a Paso");
     JButton matrices = new JButton("Generar Matrices");
-    JTextArea jta = new JTextArea("PROBANDOA");
-
+    private AreaConsola ac = new AreaConsola(ad.retornarRed());
+    
      public Frame() {
 
         getContentPane().setLayout(new FlowLayout());
@@ -67,14 +68,12 @@ public class Frame extends JFrame{
         matrices.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         matrices.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ad.opcion_click(5);
+                ac.escribeMatriz();
             }
         });
 
-        jta.setEditable(false);
-        jta.setSize(250, 250);
         p1.setLayout(new FlowLayout());
-
+                
         p1.add(plaza);
         p1.add(transicion);
         p1.add(arco);
@@ -82,12 +81,11 @@ public class Frame extends JFrame{
         p1.add(matrices);
         add(p1);
         add(ad);
-        add(jta);
-
+        add(ac);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 	setTitle("Red de Petri");
-        setResizable(false);
+        setResizable(true);
     }
     
 }
