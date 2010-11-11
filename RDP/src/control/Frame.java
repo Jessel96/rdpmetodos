@@ -47,16 +47,16 @@ public class Frame extends JFrame{
                 ad.opcion_click(2);
             }
         });
+
         paso.setFocusable(false);
-        paso.setName("Correr Maquina");
+        paso.setName("Paso a Paso");
         paso.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         paso.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         paso.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ad.opcion_click(3);
+                ad.opcion_click(4);
             }
         });
-
 
         add(plaza);
         add(transicion);
