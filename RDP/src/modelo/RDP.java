@@ -152,7 +152,6 @@ public class RDP {
             }
         }
     }
-
     public void generarMatrizPost(){
         int i,j;
         Arco aux = new Arco();
@@ -177,5 +176,12 @@ public class RDP {
 //        }
     }
 
+    public int retornaPre(int i,int j){
+        return this.pre[i][j];
+    }
+
+    public int retornaPost(int i, int j){
+        return this.post[i][j];
+    }
     
 }//Fin Clase RDP
