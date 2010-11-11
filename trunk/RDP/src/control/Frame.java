@@ -9,10 +9,12 @@ import javax.swing.*;
 public class Frame extends JFrame{
 
     public AreaDibujo  ad= new AreaDibujo();
+    static JPanel p1=new JPanel();
     JButton plaza = new JButton("Plaza");
     JButton transicion = new JButton("Transición");
     JButton arco = new JButton("Arco");
     JButton paso = new JButton("Paso a Paso");
+    JButton matrices = new JButton("Generar Matrices");
 
      public Frame() {
 
@@ -58,10 +60,24 @@ public class Frame extends JFrame{
             }
         });
 
-        add(plaza);
-        add(transicion);
-        add(arco);
-        add(paso);
+        matrices.setFocusable(false);
+        matrices.setName("Generar Matrices");
+        matrices.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        matrices.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        matrices.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ad.opcion_click(5);
+            }
+        });
+
+        p1.setLayout(new FlowLayout());
+
+        p1.add(plaza);
+        p1.add(transicion);
+        p1.add(arco);
+        p1.add(paso);
+        p1.add(matrices);
+        add(p1);
         add(ad);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
