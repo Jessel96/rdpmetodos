@@ -153,5 +153,29 @@ public class RDP {
         }
     }
 
+    public void generarMatrizPost(){
+        int i,j;
+        Arco aux = new Arco();
+        this.post = new int [this.numPlazas()][this.numTransiciones()];
+
+        for (i=0; i<this.numPlazas(); i++) {
+            for(j=0;j<this.numTransiciones();j++){
+                this.post[i][j]=0;
+            }
+        }
+        for(i=0;i<this.numArcos();i++){
+            aux= this.getArco(i);
+            if(aux.prepost().equals("post")){
+                this.post[aux.getPlaza()][aux.getTransicion()]=aux.getPeso();
+            }
+        }
+//        for (i=0; i<this.numPlazas(); i++) {
+//            for(j=0;j<this.numTransiciones();j++){
+//                System.out.print("["+this.post[i][j]+"]");
+//            }
+//            System.out.println("");
+//        }
+    }
+
     
 }//Fin Clase RDP
