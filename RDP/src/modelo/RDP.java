@@ -58,6 +58,10 @@ public class RDP {
         this.arcos.add(a);
     }
 
+    public Arco getArco(int pos){
+        return (arcos.get(pos));
+    }
+
     public int numArcos(){
         return this.arcos.size();
     }
@@ -129,6 +133,24 @@ public class RDP {
             }
         }
         return -1;
+    }
+
+    public void generarMatrizPre(){
+        int i,j;
+        Arco aux = new Arco();
+        this.pre = new int [this.numPlazas()][this.numTransiciones()];
+
+        for (i=0; i<this.numPlazas(); i++) {
+            for(j=0;j<this.numTransiciones();j++){
+                this.pre[i][j]=0;
+            }
+        }
+        for(i=0;i<this.numArcos();i++){
+            aux= this.getArco(i);
+            if(aux.prepost().equals("pre")){
+                this.pre[aux.getPlaza()][aux.getTransicion()]=aux.getPeso();
+            }
+        }
     }
 
     

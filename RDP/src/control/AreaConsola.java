@@ -19,6 +19,7 @@ public class AreaConsola extends javax.swing.JScrollPane{
     public void escribeMatriz(){
         jta.setText("");
         jta.append("Hola Presionando Boton Matriz\n");
+        this.redpetri.generarMatrizPre();
     }
 
 }
