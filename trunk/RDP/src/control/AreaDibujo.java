@@ -1,7 +1,10 @@
 package control;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.*;
 import javax.swing.JOptionPane;
 import modelo.Posicion;
@@ -215,8 +218,56 @@ public class AreaDibujo extends javax.swing.JPanel{
             opcion_click(-1);
         }
         if(this.click==3 && this.confirm){
-            g.setColor(Color.red);
-            g.drawLine(this.inicioX,this.inicioY,this.punto_x,this.punto_y);
+            double ang=0.0, angSep=0.0;
+            double tx,ty;
+            int dist=0;
+            Point punto1=null,punto2=null;
+
+            //defino dos puntos extremos
+            punto1=new Point(this.inicioX,this.inicioY);
+            punto2=new Point(this.punto_x,this.punto_y);
+
+            //tamaño de la punta de la flecha
+            dist=15;
+
+            /* (la coordenadas de la ventana es al revez)
+                calculo de la variacion de "x" y "y" para hallar el angulo
+             **/
+
+            ty=-(punto1.y-punto2.y)*1.0;
+            tx=(punto1.x-punto2.x)*1.0;
+            //angulo
+            ang=Math.atan (ty/tx);
+
+            if(tx<0)
+            {// si tx es negativo aumentar 180 grados
+               ang+=Math.PI;
+            }
+
+            //puntos de control para la punta
+            //p1 y p2 son los puntos de salida
+            Point p1=new Point(),p2=new Point(),punto=punto2;
+
+            //angulo de separacion
+            angSep=25.0;
+
+            p1.x=(int)(punto.x+dist*Math.cos (ang-Math.toRadians (angSep)));
+            p1.y=(int)(punto.y-dist*Math.sin (ang-Math.toRadians (angSep)));
+            p2.x=(int)(punto.x+dist*Math.cos (ang+Math.toRadians (angSep)));
+            p2.y=(int)(punto.y-dist*Math.sin (ang+Math.toRadians (angSep)));
+
+            Graphics2D g2D=(Graphics2D)g;
+
+            //dale color a la linea
+            g.setColor (Color.red);
+            // grosor de la linea
+            g2D.setStroke (new BasicStroke(1.2f));
+            //dibuja la linea de extremo a extremo
+            g.drawLine (punto1.x,punto1.y,punto.x,punto.y);
+            //dibujar la punta
+            g.drawLine (p1.x,p1.y,punto.x,punto.y);
+            g.drawLine (p2.x,p2.y,punto.x,punto.y);
+
             this.confirm=false;
         }
     }
