@@ -291,15 +291,32 @@ public class AreaDibujo extends javax.swing.JPanel{
             g.drawString("t"+(i+1),pos.getX(), pos.getY()-2);
         }
         for(i=0;i<this.redpetri.numArcos(); i++){
-            inPlaza=this.redpetri.getIndicePlaza(i);
-            inTrans=this.redpetri.getIndiceTransicion(i);
+            if(this.redpetri.getArco(i).prepost().equals("pre")){//arcos pre
+                inPlaza=this.redpetri.getIndicePlaza(i);
+                inTrans=this.redpetri.getIndiceTransicion(i);
 
-            pos=this.redpetri.getPosPlaza(inPlaza); //posicion de la plaza
-            pos2=this.redpetri.getPosTransicion(inTrans); //posicion de la transicion
-            g.setColor(Color.red);
-            g.drawLine(pos.getX(), pos.getY(), pos2.getX(), pos2.getY());
-            g.setColor(Color.black);
-            g.drawString(""+this.redpetri.getPesoArco(i),((pos.getX()+pos2.getX())/2),((pos.getY()+pos2.getY())/2));
+                pos=this.redpetri.getPosPlaza(inPlaza); //posicion de la plaza
+                pos2=this.redpetri.getPosTransicion(inTrans); //posicion de la transicion
+                g.setColor(Color.red);
+                g.drawLine(pos.getX(), pos.getY(), pos2.getX(), pos2.getY());//de la plasa a la transicion
+                g.setColor(Color.black);
+                g.drawString(""+this.redpetri.getPesoArco(i),((pos.getX()+pos2.getX())/2),((pos.getY()+pos2.getY())/2));
+
+            }
+            else{//dibuja arcos post
+                inPlaza=this.redpetri.getIndicePlaza(i);
+                inTrans=this.redpetri.getIndiceTransicion(i);
+
+                pos=this.redpetri.getPosPlaza(inPlaza); //posicion de la plaza
+                pos2=this.redpetri.getPosTransicion(inTrans); //posicion de la transicion
+                g.setColor(Color.red);
+                g.drawLine(pos2.getX(), pos2.getY()+30,pos.getX(), pos.getY()+50);//de la transicion a la plaza
+                g.setColor(Color.black);
+                g.drawString(""+this.redpetri.getPesoArco(i),((pos.getX()+pos2.getX())/2),(((pos.getY()+pos2.getY())/2))+50);
+            }
+
+
+            
         }
     }
 
