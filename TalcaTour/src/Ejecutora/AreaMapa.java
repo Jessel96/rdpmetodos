@@ -80,9 +80,43 @@ public class AreaMapa extends javax.swing.JPanel{
                 Logger.getLogger(AreaMapa.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
         System.out.println("NumLugares "+mapa[1][1].getLugaresInteres()+" Y "+mapa[0][0].pos.getY());
-        System.out.println("");
+        this.calcularDistancias();
         initComponents();
+    }
+    
+    private double distanciaEntre2pts(double x1,double y1,double x2,double y2){
+        return Math.sqrt((Math.pow(x2-x1,2)+Math.pow(y2-y1,2)));
+    }
+    private void calcularDistancias(){
+        int i,j;
+
+        for(i=0;i<9;i++){
+            for(j=0;j<14;j++){
+                //preguntar por 4 direcciones de cada nodo
+
+                System.out.println("i:"+i+" j:"+j+" ");
+                if(this.mapa[i][j].getNorte()){
+                    //setea norte             calcula Distancia       pos x intersecion actual   pos y intersecion actual  ,pos x nodo al norte (arriba en mtrz), pos Y nodo al norte
+                    this.mapa[i][j].setDnorte(this.distanciaEntre2pts(this.mapa[i][j].pos.getX(),this.mapa[i][j].pos.getY() ,this.mapa[i-1][j].pos.getX(),this.mapa[i-1][j].pos.getY()));
+                }
+                if(this.mapa[i][j].getEste()){
+                     //setea este             calcula Distancia       pos x intersecion actual   pos y intersecion actual  ,pos x nodo al este (derecha en mtrz), pos Y nodo al este
+                    this.mapa[i][j].setDeste(this.distanciaEntre2pts(this.mapa[i][j].pos.getX(),this.mapa[i][j].pos.getY() ,this.mapa[i][j+1].pos.getX(),this.mapa[i][j+1].pos.getY()));
+                }
+                if(this.mapa[i][j].getSur()){
+                     //setea sur             calcula Distancia       pos x intersecion actual   pos y intersecion actual  ,pos x nodo al sur (abajo en mtrz), pos Y nodo al sur
+                    this.mapa[i][j].setDsur(this.distanciaEntre2pts(this.mapa[i][j].pos.getX(),this.mapa[i][j].pos.getY() ,this.mapa[i+1][j].pos.getX(),this.mapa[i+1][j].pos.getY()));
+                }
+                if( this.mapa[i][j].getOeste()){
+                     //setea oeste             calcula Distancia       pos x intersecion actual   pos y intersecion actual  ,pos x nodo al oest (izq en mtrz), pos Y nodo al oest
+                    this.mapa[i][j].setDoeste(this.distanciaEntre2pts(this.mapa[i][j].pos.getX(),this.mapa[i][j].pos.getY() ,this.mapa[i][j-1].pos.getX(),this.mapa[i][j-1].pos.getY()));
+                }
+
+            }
+        }
+
     }
 
 
