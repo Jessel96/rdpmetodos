@@ -29,11 +29,6 @@ public class Interseccion {
         this.este = a.getEste();
         this.oeste = a.getOeste();
 
-        this.dnorte = a.getDnorte();
-        this.dsur = a.getDsur();
-        this.deste = a.getDeste();
-        this.doeste = a.getDoeste();
-
         this.lugaresInteres= a.getLugaresInteres();
         this.nombreLugar= a.getNombreLugar();
     }
