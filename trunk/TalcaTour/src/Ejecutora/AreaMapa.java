@@ -18,6 +18,15 @@ public class AreaMapa extends javax.swing.JPanel{
 
 
     public AreaMapa(){
+        this.cargarMapa();
+        //System.out.println("NumLugares "+mapa[1][1].getLugaresInteres()+" Y "+mapa[0][0].pos.getY());
+        this.calcularDistancias();
+
+
+
+        initComponents();
+    }
+    private void cargarMapa(){
         FileReader file= null;
         try {
             file = new FileReader("Mapeo.txt");
@@ -28,7 +37,7 @@ public class AreaMapa extends javax.swing.JPanel{
                 //Lee la posicion x,y del mapa
                 p = new Posicion(lee.nextInt(),lee.nextInt());
                 this.inter.setPos(p);
-                System.out.print("Punto x: "+p.getX() +" Punto y:"+p.getY());
+                //System.out.print("Punto x: "+p.getX() +" Punto y:"+p.getY());
 
                 //Lee si la calle está o no habilitada
                 if(lee.nextInt()==1){
@@ -59,16 +68,16 @@ public class AreaMapa extends javax.swing.JPanel{
 
                 //Lee la cantidad de lugares de interes que hay en el nodo
                 this.inter.setLugaresInteres(lee.nextInt());
-                System.out.print(" Lugares de interes: " + this.inter.getLugaresInteres());
+                //System.out.print(" Lugares de interes: " + this.inter.getLugaresInteres());
                 if(this.inter.getLugaresInteres()!=0){
                     while(!lee.hasNextInt()){
                         this.inter.setNombreLugar(lee.next());
                     }
-                    System.out.print(" Nombre: "+ this.inter.getNombreLugar());
+                    //System.out.print(" Nombre: "+ this.inter.getNombreLugar());
                 }
                 mapa[i][j] = new Interseccion(this.inter);
                 this.inter.setNombreLugar();
-                System.out.println("");
+               // System.out.println("");
                 }
             }
         } catch (FileNotFoundException ex) {
@@ -80,10 +89,6 @@ public class AreaMapa extends javax.swing.JPanel{
                 Logger.getLogger(AreaMapa.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-        System.out.println("NumLugares "+mapa[1][1].getLugaresInteres()+" Y "+mapa[0][0].pos.getY());
-        this.calcularDistancias();
-        initComponents();
     }
     
     private double distanciaEntre2pts(double x1,double y1,double x2,double y2){
@@ -96,7 +101,7 @@ public class AreaMapa extends javax.swing.JPanel{
             for(j=0;j<14;j++){
                 //preguntar por 4 direcciones de cada nodo
 
-                System.out.println("i:"+i+" j:"+j+" ");
+                //System.out.println("i:"+i+" j:"+j+" ");
                 if(this.mapa[i][j].getNorte()){
                     //setea norte             calcula Distancia       pos x intersecion actual   pos y intersecion actual  ,pos x nodo al norte (arriba en mtrz), pos Y nodo al norte
                     this.mapa[i][j].setDnorte(this.distanciaEntre2pts(this.mapa[i][j].pos.getX(),this.mapa[i][j].pos.getY() ,this.mapa[i-1][j].pos.getX(),this.mapa[i-1][j].pos.getY()));
