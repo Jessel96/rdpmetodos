@@ -15,12 +15,15 @@ public class AreaMapa extends javax.swing.JPanel{
     private Interseccion mapa[][] = new Interseccion[9][14];
     private Interseccion inter = new Interseccion();
     private Posicion p;
+    private String[] lugares;
+    private int [][] interLugares;
 
 
     public AreaMapa(){
         this.cargarMapa();
         //System.out.println("NumLugares "+mapa[1][1].getLugaresInteres()+" Y "+mapa[0][0].pos.getY());
         this.calcularDistancias();
+        this.cargarLugaresAvisitar();
 
 
 
@@ -88,6 +91,25 @@ public class AreaMapa extends javax.swing.JPanel{
             } catch (IOException ex) {
                 Logger.getLogger(AreaMapa.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }
+    private void cargarLugaresAvisitar(){
+        try {
+            FileReader file = null;
+            int i;
+            file = new FileReader("sitios.txt");
+            Scanner lee = new Scanner(file);
+            this.lugares = new String[lee.nextInt()];
+            lee.nextLine();
+            for (i = 0; i < this.lugares.length; i++) {
+                this.lugares[i] = lee.nextLine();
+            }
+//            for (i = 0; i < this.lugares.length; i++) {
+//                System.out.println(this.lugares[i]);
+//            }
+            lee.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(AreaMapa.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
