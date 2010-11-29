@@ -123,10 +123,13 @@ public class AreaMapa extends javax.swing.JPanel{
     
     public int setLugar(int i){
         int j,k;
+
         for(j=0;j<9;j++){
             for(k=0;k<14;k++){
+                Pattern patron = Pattern.compile(this.lugares[i]);
+                Matcher m = patron.matcher(this.mapa[j][k].getNombreLugar());
                 System.out.println("Ingreso: "+this.lugares[i]+" Buscando: "+this.mapa[j][k].getNombreLugar());
-                if(Pattern.matches(this.lugares[i],this.mapa[j][k].getNombreLugar())){
+                if(m.find()){
                     this.interLugares[i][0]=j;
                     this.interLugares[i][1]=k;
                     System.out.println("J: "+j+" K: "+k);
