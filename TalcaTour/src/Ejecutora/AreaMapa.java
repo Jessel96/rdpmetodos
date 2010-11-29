@@ -1,5 +1,6 @@
 package Ejecutora;
 
+import java.awt.Color;
 import java.io.*;
 import java.util.Scanner;
 import java.awt.Graphics;
@@ -8,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import java.util.regex.*;
 
 public class AreaMapa extends javax.swing.JPanel{
 
@@ -24,9 +26,7 @@ public class AreaMapa extends javax.swing.JPanel{
         //System.out.println("NumLugares "+mapa[1][1].getLugaresInteres()+" Y "+mapa[0][0].pos.getY());
         this.calcularDistancias();
         this.cargarLugaresAvisitar();
-
-
-
+        this.buscarInterLugares();
         initComponents();
     }
     private void cargarMapa(){
@@ -112,8 +112,32 @@ public class AreaMapa extends javax.swing.JPanel{
             Logger.getLogger(AreaMapa.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    private void buscarInterLugares(){
+        int i;
+        this.interLugares = new int [this.lugares.length][2];
+
+        for (i = 0; i < this.lugares.length; i++) {
+            setLugar(i);
+        }
+    }
     
-    private double distanciaEntre2pts(double x1,double y1,double x2,double y2){
+    public int setLugar(int i){
+        int j,k;
+        for(j=0;j<9;j++){
+            for(k=0;k<14;k++){
+                System.out.println("Ingreso: "+this.lugares[i]+" Buscando: "+this.mapa[j][k].getNombreLugar());
+                if(Pattern.matches(this.lugares[i],this.mapa[j][k].getNombreLugar())){
+                    this.interLugares[i][0]=j;
+                    this.interLugares[i][1]=k;
+                    System.out.println("J: "+j+" K: "+k);
+                    return 0;
+                }
+            }
+        }
+        return 0;
+    }
+
+    public double distanciaEntre2pts(double x1,double y1,double x2,double y2){
         return Math.sqrt((Math.pow(x2-x1,2)+Math.pow(y2-y1,2)));
     }
     private void calcularDistancias(){
@@ -184,12 +208,25 @@ public class AreaMapa extends javax.swing.JPanel{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(imagenFondo,0,0,null);
+        dibujaLugaresInteres(g);
         dibujar(g);
 
     }
 
     protected void dibujar(Graphics g){
         
+    }
+
+    protected void dibujaLugaresInteres(Graphics g){
+        int i;
+        g.setColor(Color.RED);
+        for (i = 0; i < this.lugares.length; i++) {
+            g.drawString("PEO",mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getX() ,
+                    mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY());
+        //System.out.println(mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getX()+" "+mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY());
+        }
+        
+
     }
 
 

@@ -53,9 +53,9 @@
 604 191 0 1 1 0 0
 641 192 0 0 1 0 0
 678 192 1 0 1 0 0
-720 192 1 1 0 0 1 Crea (Centro Regional de Abastecimiento)
+720 192 1 1 0 0 1 Crea Centro Regional de Abastecimiento
 228 232 1 0 0 0 0
-266 234 1 0 0 1 2 Centro de Extensión U. de Talca /Sernatur
+266 234 1 0 0 1 2 Centro de Extensión U. de Talca Sernatur
 304 233 0 1 0 1 0
 341 234 1 0 0 1 0
 380 233 0 1 0 1 0
@@ -69,8 +69,8 @@
 676 234 1 0 0 1 0
 719 232 1 1 0 1 0
 227 273 1 0 1 0 0
-265 274 1 0 1 0 2 Catedral /Plaza de Armas
-303 273 0 1 1 0 2 Municipalidad /Intendencia
+265 274 1 0 1 0 2 Catedral / Plaza de Armas
+303 273 0 1 1 0 2 Municipalidad / Intendencia
 341 273 1 0 1 0 1 Museo O'Higginiano
 380 274 0 1 1 0 0
 416 274 1 0 1 0 0
