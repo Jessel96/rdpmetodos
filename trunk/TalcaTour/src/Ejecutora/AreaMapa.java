@@ -224,8 +224,9 @@ public class AreaMapa extends javax.swing.JPanel{
         int i;
         g.setColor(Color.RED);
         for (i = 0; i < this.lugares.length; i++) {
-            g.drawString("PEO",mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getX() ,
-                    mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY());
+            g.fillOval(mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getX(),
+                    mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY(), 10,10);
+
         //System.out.println(mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getX()+" "+mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY());
         }
         
