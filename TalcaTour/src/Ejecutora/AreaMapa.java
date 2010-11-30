@@ -1,10 +1,13 @@
 package Ejecutora;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.io.*;
 import java.util.Scanner;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -438,10 +441,6 @@ public class AreaMapa extends javax.swing.JPanel{
                 }//Fin ELse si no debemos ir derecha.
             }//Fin while
         }//Fin For
-        System.out.println(this.recorrido.size());
-        for (i=0;  i<recorrido.size(); i++) {
-            System.out.println("Mapa["+this.recorrido.get(i).getX()+"]["+this.recorrido.get(i).getY()+"]");
-        }
     }
 
     private boolean verifica(Posicion i,Posicion f){
@@ -496,7 +495,62 @@ public class AreaMapa extends javax.swing.JPanel{
     }
 
     protected void dibujar(Graphics g){
-        
+        int i;
+        for (i=0;  i<this.recorrido.size()-1; i++) {
+            double ang=0.0, angSep=0.0;
+            double tx,ty;
+            int dist=0;
+            Point punto1=null,punto2=null;
+
+            //defino dos puntos extremos
+            punto1=new Point(this.mapa[this.recorrido.get(i).getX()][this.recorrido.get(i).getY()].pos.getX()
+                    ,this.mapa[this.recorrido.get(i).getX()][this.recorrido.get(i).getY()].pos.getY());
+            punto2=new Point(this.mapa[this.recorrido.get(i+1).getX()][this.recorrido.get(i+1).getY()].pos.getX()
+                    ,this.mapa[this.recorrido.get(i+1).getX()][this.recorrido.get(i+1).getY()].pos.getY());
+
+            //tamaño de la punta de la flecha
+            dist=10;
+
+            /* (la coordenadas de la ventana es al revez)
+                calculo de la variacion de "x" y "y" para hallar el angulo
+             **/
+
+            ty=-(punto1.y-punto2.y)*1.0;
+            tx=(punto1.x-punto2.x)*1.0;
+            //angulo
+            ang=Math.atan (ty/tx);
+
+            if(tx<0)
+            {// si tx es negativo aumentar 180 grados
+               ang+=Math.PI;
+            }
+
+            //puntos de control para la punta
+            //p1 y p2 son los puntos de salida
+            Point p1=new Point(),p2=new Point(),punto=punto2;
+
+            //angulo de separacion
+            angSep=25.0;
+
+            p1.x=(int)(punto.x+dist*Math.cos (ang-Math.toRadians (angSep)));
+            p1.y=(int)(punto.y-dist*Math.sin (ang-Math.toRadians (angSep)));
+            p2.x=(int)(punto.x+dist*Math.cos (ang+Math.toRadians (angSep)));
+            p2.y=(int)(punto.y-dist*Math.sin (ang+Math.toRadians (angSep)));
+
+            Graphics2D g2D=(Graphics2D)g;
+
+            //dale color a la linea
+            g.setColor (Color.black);
+            // grosor de la linea
+            g2D.setStroke (new BasicStroke(2.2f));
+            //dibuja la linea de extremo a extremo
+            g.drawLine (punto1.x,punto1.y,punto.x,punto.y);
+            //dibujar la punta
+            g.drawLine (p1.x,p1.y,punto.x,punto.y);
+            g.drawLine (p2.x,p2.y,punto.x,punto.y);
+
+            g.drawString(""+(i+1), (punto1.x+punto2.x)/2, (punto1.y+punto2.y)/2);
+        }
     }
 
     protected void dibujaLugaresInteres(Graphics g){
@@ -504,8 +558,7 @@ public class AreaMapa extends javax.swing.JPanel{
         g.setColor(Color.RED);
         for (i = 0; i < this.lugares.length; i++) {
             g.fillOval(mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getX(),
-                    mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY(), 11, 11);
-        //System.out.println(mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getX()+" "+mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY());
+                    mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY(), 11, 11);        
         }
         
 
