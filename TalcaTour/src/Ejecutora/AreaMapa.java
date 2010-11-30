@@ -30,6 +30,7 @@ public class AreaMapa extends javax.swing.JPanel{
         this.cargarLugaresAvisitar();
         this.buscarInterLugares();
         this.ordenarNavegacion();
+        this.buscarRuta();
         initComponents();
     }
     private void cargarMapa(){
@@ -215,7 +216,6 @@ public class AreaMapa extends javax.swing.JPanel{
         for(i=0;i<this.lugares.length-1;i++){
             ptoInicio = new Posicion(this.interLugares[i][0],this.interLugares[i][1]);
             ptoFin = new Posicion(this.interLugares[i+1][0],this.interLugares[i+1][1]);
-
             while(!this.verifica(ptoInicio, ptoFin)){
                 if(ptoFin.getX()-ptoInicio.getX()<0){//Pregunta si debe avanzar arriba
                     if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getNorte()){//preg. si puede avanzar arriba.
@@ -325,12 +325,123 @@ public class AreaMapa extends javax.swing.JPanel{
                         }
                     }
                 }//Fin Arriba y abajo
-                if(ptoFin.getY()-ptoInicio.getY()>0){
-                    if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getEste()){
+                /*****************************************/
+                if(ptoFin.getY()-ptoInicio.getY()>0){//si debe ir Derecha
+                    if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getEste()){//si puedo ir a derecha (este)
+                        ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()+1);
+                        this.recorrido.add(ptoInter);
+                        ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                    }
+                    else{
+                        if(ptoFin.getX()-ptoInicio.getX()<0){//si debe ir arriba(norte)
+                            if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getNorte()){//preg. si puede avanzar arriba.
+                                ptoInter = new Posicion(ptoInicio.getX()-1,ptoInicio.getY());
+                                this.recorrido.add(ptoInter);
+                                ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                            }//Fin if puede avanzar arriba
+                            else{//si no puede ir arriba
+                                if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getSur()){//si puede ir abajo?
+                                    ptoInter = new Posicion(ptoInicio.getX()+1,ptoInicio.getY());
+                                    this.recorrido.add(ptoInter);
+                                    ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                }
+                                else{//va a la izquierda
+                                    if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getOeste()){//Preg si puede Avanzar izquierda
+                                        ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()-1);
+                                        this.recorrido.add(ptoInter);
+                                        ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                    }
+                                }
+                            }
+                        }
+                        else{
+                            if(ptoFin.getX()-ptoInicio.getX()>0){//preguntamos si debemos Avanzar abajo
+                                if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getSur()){
+                                    ptoInter = new Posicion(ptoInicio.getX()+1,ptoInicio.getY());
+                                    this.recorrido.add(ptoInter);
+                                    ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                }
+                                else{//si no podemor ir abajo.
+                                    if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getOeste()){//Preg si puede Avanzar izquierda
+                                        ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()-1);
+                                        this.recorrido.add(ptoInter);
+                                        ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                    }
+                                    else{//va arriba.
+                                        if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getNorte()){//preg. si puede avanzar arriba.
+                                            ptoInter = new Posicion(ptoInicio.getX()-1,ptoInicio.getY());
+                                            this.recorrido.add(ptoInter);
+                                            ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                        }//Fin if puede avanzar arriba
+                                    }
+                                }
+                            }
+
+                        }
                     }
                 }
+                else{//si no debemor ir derecha
+                    if(ptoFin.getY()-ptoInicio.getY()<0){//preg. si debemos ir izquierda
+                        if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getOeste()){//Preg si puede Avanzar izquierda
+                            ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()-1);
+                            this.recorrido.add(ptoInter);
+                            ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                        }
+                        else{
+                             if(ptoFin.getX()-ptoInicio.getX()<0){//si debe ir arriba(norte)
+                                if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getNorte()){//preg. si puede avanzar arriba.
+                                    ptoInter = new Posicion(ptoInicio.getX()-1,ptoInicio.getY());
+                                    this.recorrido.add(ptoInter);
+                                    ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                }//Fin if puede avanzar arriba
+                                else{
+                                    if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getSur()){//si puede ir abajo?
+                                        ptoInter = new Posicion(ptoInicio.getX()+1,ptoInicio.getY());
+                                        this.recorrido.add(ptoInter);
+                                        ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                    }
+                                    else{
+                                         if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getEste()){//si puedo ir a derecha (este)
+                                            ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()+1);
+                                            this.recorrido.add(ptoInter);
+                                            ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                        }                                        
+                                    }                                    
+                                }
+                            }
+                            else{
+                                 if(ptoFin.getX()-ptoInicio.getX()>0){//preguntamos si debemos Avanzar abajo
+                                     if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getSur()){
+                                         ptoInter = new Posicion(ptoInicio.getX()+1,ptoInicio.getY());
+                                         this.recorrido.add(ptoInter);
+                                         ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                     }
+                                     else{
+                                         if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getEste()){//si puedo ir a derecha (este)
+                                            ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()+1);
+                                            this.recorrido.add(ptoInter);
+                                            ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                         }
+                                         else{//si no puedo ir derecha.
+                                             if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getNorte()){//preg. si puede avanzar arriba.
+                                                ptoInter = new Posicion(ptoInicio.getX()-1,ptoInicio.getY());
+                                                this.recorrido.add(ptoInter);
+                                                ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                            }//Fin if puede avanzar arriba
+                                         }
+                                     }
+                                 }
+                            }
+                        }
+                    }
+
+                }//Fin ELse si no debemos ir derecha.
             }//Fin while
         }//Fin For
+        System.out.println(this.recorrido.size());
+        for (i=0;  i<recorrido.size(); i++) {
+            System.out.println("Mapa["+this.recorrido.get(i).getX()+"]["+this.recorrido.get(i).getY()+"]");
+        }
     }
 
     private boolean verifica(Posicion i,Posicion f){
