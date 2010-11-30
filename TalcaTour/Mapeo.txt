@@ -55,7 +55,7 @@
 678 192 1 0 1 0 0
 720 192 1 1 0 0 1 Crea Centro Regional de Abastecimiento
 228 232 1 0 0 0 0
-266 234 1 0 0 1 2 Centro de Extensión U. de Talca Sernatur
+266 234 1 0 0 1 2 Centro de Extensión U. de Talca / Sernatur
 304 233 0 1 0 1 0
 341 234 1 0 0 1 0
 380 233 0 1 0 1 0
