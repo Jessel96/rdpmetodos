@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import java.util.regex.*;
+import java.util.ArrayList;
 
 public class AreaMapa extends javax.swing.JPanel{
 
@@ -19,6 +20,7 @@ public class AreaMapa extends javax.swing.JPanel{
     private Posicion p;
     private String[] lugares;
     private int [][] interLugares;
+    private ArrayList <Posicion> recorrido=new ArrayList<Posicion>(0);
 
 
     public AreaMapa(){
@@ -27,6 +29,7 @@ public class AreaMapa extends javax.swing.JPanel{
         this.calcularDistancias();
         this.cargarLugaresAvisitar();
         this.buscarInterLugares();
+        this.ordenarNavegacion();
         initComponents();
     }
     private void cargarMapa(){
@@ -131,8 +134,7 @@ public class AreaMapa extends javax.swing.JPanel{
                 System.out.println("Ingreso: "+this.lugares[i]+" Buscando: "+this.mapa[j][k].getNombreLugar());
                 if(m.find()){
                     this.interLugares[i][0]=j;
-                    this.interLugares[i][1]=k;
-                    System.out.println("J: "+j+" K: "+k);
+                    this.interLugares[i][1]=k;                   
                     return 0;
                 }
             }
@@ -167,12 +169,178 @@ public class AreaMapa extends javax.swing.JPanel{
                      //setea oeste             calcula Distancia       pos x intersecion actual   pos y intersecion actual  ,pos x nodo al oest (izq en mtrz), pos Y nodo al oest
                     this.mapa[i][j].setDoeste(this.distanciaEntre2pts(this.mapa[i][j].pos.getX(),this.mapa[i][j].pos.getY() ,this.mapa[i][j-1].pos.getX(),this.mapa[i][j-1].pos.getY()));
                 }
-
             }
         }
-
     }
 
+    private void ordenarNavegacion(){
+        int i,j,auxIndice=1,aux1,aux2;
+        double dist1,dist2;
+        
+        for (i = 1; i < lugares.length; i++) {
+            dist1=this.distanciaEntre2pts(
+                        this.mapa[this.interLugares[i-1][0]][this.interLugares[i-1][1]].pos.getX(),
+                        this.mapa[this.interLugares[i-1][0]][this.interLugares[i-1][1]].pos.getY(),
+                        this.mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getX(),
+                        this.mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY()
+                        );
+            for (j = i+1; j < lugares.length-1; j++) {
+                dist2=this.distanciaEntre2pts(
+                        this.mapa[this.interLugares[i-1][0]][this.interLugares[i-1][1]].pos.getX(),
+                        this.mapa[this.interLugares[i-1][0]][this.interLugares[i-1][1]].pos.getY(),
+                        this.mapa[this.interLugares[j][0]][this.interLugares[j][1]].pos.getX(),
+                        this.mapa[this.interLugares[j][0]][this.interLugares[j][1]].pos.getY()
+                        );
+                if(dist2<dist1){
+                    auxIndice=j;
+                    dist1=dist2;
+                }
+            }
+            aux1=this.interLugares[i][0];
+            aux2=this.interLugares[i][1];
+            this.interLugares[i][0]=this.interLugares[auxIndice][0];
+            this.interLugares[i][1]=this.interLugares[auxIndice][1];
+            this.interLugares[auxIndice][0]=aux1;
+            this.interLugares[auxIndice][1]=aux2;
+        }        
+    }
+
+    private void buscarRuta(){
+
+        Posicion ptoInicio, ptoFin, ptoOrigen, ptoInter;
+        int i;
+
+        ptoOrigen = new Posicion(this.interLugares[0][0],this.interLugares[0][1]);
+        this.recorrido.add(ptoOrigen);
+        for(i=0;i<this.lugares.length-1;i++){
+            ptoInicio = new Posicion(this.interLugares[i][0],this.interLugares[i][1]);
+            ptoFin = new Posicion(this.interLugares[i+1][0],this.interLugares[i+1][1]);
+
+            while(!this.verifica(ptoInicio, ptoFin)){
+                if(ptoFin.getX()-ptoInicio.getX()<0){//Pregunta si debe avanzar arriba
+                    if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getNorte()){//preg. si puede avanzar arriba.
+                        ptoInter = new Posicion(ptoInicio.getX()-1,ptoInicio.getY());
+                        this.recorrido.add(ptoInter);
+                        ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                    }//Fin if
+                    else{
+                        if(ptoFin.getY()-ptoInicio.getY()<0){//preg. si debe ir a izquierda
+                            if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getOeste()){//preg. si puede avanzar izq.
+                                ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()-1);
+                                this.recorrido.add(ptoInter);
+                                ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                            }
+                            else{
+                                if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getEste()){//preg. si puede avanzar der
+                                    ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()+1);
+                                    this.recorrido.add(ptoInter);
+                                    ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                }
+                                else{
+                                    if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getSur()){//preg. si puede avanzar abajo
+                                        ptoInter = new Posicion(ptoInicio.getX()+1,ptoInicio.getY());
+                                        this.recorrido.add(ptoInter);
+                                        ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                    }
+                                }
+                            }
+                        }
+                        else{
+                            if(ptoFin.getY()-ptoInicio.getY()>0){//Pregunta si debe avanzar derecha
+                                if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getEste()){//preg. si puede avanzar derecha
+                                    ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()+1);
+                                    this.recorrido.add(ptoInter);
+                                    ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                }
+                                else{
+                                    if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getSur()){//Avanza abajo
+                                        ptoInter = new Posicion(ptoInicio.getX()+1,ptoInicio.getY());
+                                        this.recorrido.add(ptoInter);
+                                        ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                    }
+                                     else{
+                                        if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getOeste()){//Avanza izquierda
+                                            ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()-1);
+                                            this.recorrido.add(ptoInter);
+                                            ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                        }
+                                     }
+                                }
+                            }
+                        }
+                    }
+                }//Fin if Avanza arriba
+                else{
+                    if(ptoFin.getX()-ptoInicio.getX()>0){//preguntamos si debemos Avanzar abajo
+                        if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getSur()){
+                            ptoInter = new Posicion(ptoInicio.getX()+1,ptoInicio.getY());
+                            this.recorrido.add(ptoInter);
+                            ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                        }
+                        else{
+                            if(ptoFin.getY()-ptoInicio.getY()>0){//preg. si debemos ir derecha
+                                if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getEste()){
+                                    ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()+1);
+                                    this.recorrido.add(ptoInter);
+                                    ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                }
+                                else{//si no puede ir derecha ni arriba (donde debia ir)
+                                    if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getNorte()){//Preg. si puede avanza arriba
+                                        ptoInter = new Posicion(ptoInicio.getX()-1,ptoInicio.getY());
+                                        this.recorrido.add(ptoInter);
+                                        ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                    }
+                                    else{
+                                        if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getOeste()){//Avanza izquierda
+                                            ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()-1);
+                                            this.recorrido.add(ptoInter);
+                                            ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                        }
+                                    }
+                                }
+                            }
+                            else{
+                                if(ptoFin.getY()-ptoInicio.getY()<0){//preg. si debemos ir izquierda
+                                    if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getOeste()){//Preg si puede Avanzar izquierda
+                                        ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()-1);
+                                        this.recorrido.add(ptoInter);
+                                        ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                    }
+                                    else{
+                                        if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getEste()){//Preg si puede avanzar derecha
+                                            ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()+1);
+                                            this.recorrido.add(ptoInter);
+                                            ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                        }
+                                        else{
+                                            if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getNorte()){//Preg si puede avanzar arriba
+                                                ptoInter = new Posicion(ptoInicio.getX()-1,ptoInicio.getY());
+                                                this.recorrido.add(ptoInter);
+                                                ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }//Fin Arriba y abajo
+                if(ptoFin.getY()-ptoInicio.getY()>0){
+                    if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getEste()){
+                    }
+                }
+            }//Fin while
+        }//Fin For
+    }
+
+    private boolean verifica(Posicion i,Posicion f){
+        if(i.getX()==f.getX() && i.getY()==f.getY()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
     private void initComponents() {
         setPreferredSize(new java.awt.Dimension(967, 471));
@@ -225,8 +393,7 @@ public class AreaMapa extends javax.swing.JPanel{
         g.setColor(Color.RED);
         for (i = 0; i < this.lugares.length; i++) {
             g.fillOval(mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getX(),
-                    mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY(), 10,10);
-
+                    mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY(), 11, 11);
         //System.out.println(mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getX()+" "+mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY());
         }
         
