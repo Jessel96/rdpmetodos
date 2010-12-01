@@ -24,7 +24,7 @@ public class AreaMapa extends javax.swing.JPanel{
     private String[] lugares;
     private int [][] interLugares;
     private ArrayList <Posicion> recorrido=new ArrayList<Posicion>(0);
-
+    private boolean flag=false;
 
     public AreaMapa(){
         this.cargarMapa();
@@ -35,6 +35,15 @@ public class AreaMapa extends javax.swing.JPanel{
         this.ordenarNavegacion();
         this.buscarRuta();
         initComponents();
+    }
+    public void setflag(int i){
+        if(i==1){
+        this.flag=true;
+        }
+        else{
+            if(i==0)
+            this.flag=false;
+        }
     }
     private void cargarMapa(){
         FileReader file= null;
@@ -74,7 +83,6 @@ public class AreaMapa extends javax.swing.JPanel{
                 else{
                     this.inter.setOeste(false);
                 }
-                //Calcular las distancias
 
                 //Lee la cantidad de lugares de interes que hay en el nodo
                 this.inter.setLugaresInteres(lee.nextInt());
@@ -121,7 +129,7 @@ public class AreaMapa extends javax.swing.JPanel{
     }
     private void buscarInterLugares(){
         int i;
-        this.interLugares = new int [this.lugares.length][2];
+        this.interLugares = new int [this.lugares.length+1][2];
 
         for (i = 0; i < this.lugares.length; i++) {
             setLugar(i);
@@ -206,17 +214,19 @@ public class AreaMapa extends javax.swing.JPanel{
             this.interLugares[i][1]=this.interLugares[auxIndice][1];
             this.interLugares[auxIndice][0]=aux1;
             this.interLugares[auxIndice][1]=aux2;
-        }        
+        }
+        this.interLugares[i][0]=this.interLugares[0][0];
+        this.interLugares[i][1]=this.interLugares[0][1];
     }
 
-    private void buscarRuta(){
+    public void buscarRuta(){
 
         Posicion ptoInicio, ptoFin, ptoOrigen, ptoInter;
         int i;
 
         ptoOrigen = new Posicion(this.interLugares[0][0],this.interLugares[0][1]);
         this.recorrido.add(ptoOrigen);
-        for(i=0;i<this.lugares.length-1;i++){
+        for(i=0;i<this.lugares.length;i++){
             ptoInicio = new Posicion(this.interLugares[i][0],this.interLugares[i][1]);
             ptoFin = new Posicion(this.interLugares[i+1][0],this.interLugares[i+1][1]);
             while(!this.verifica(ptoInicio, ptoFin)){
@@ -496,66 +506,69 @@ public class AreaMapa extends javax.swing.JPanel{
 
     protected void dibujar(Graphics g){
         int i;
-        for (i=0;  i<this.recorrido.size()-1; i++) {
-            double ang=0.0, angSep=0.0;
-            double tx,ty;
-            int dist=0;
-            Point punto1=null,punto2=null;
+        if(flag){
+            for (i=0;  i<this.recorrido.size()-1; i++) {
+                double ang=0.0, angSep=0.0;
+                double tx,ty;
+                int dist=0;
+                Point punto1=null,punto2=null;
 
-            //defino dos puntos extremos
-            punto1=new Point(this.mapa[this.recorrido.get(i).getX()][this.recorrido.get(i).getY()].pos.getX()
-                    ,this.mapa[this.recorrido.get(i).getX()][this.recorrido.get(i).getY()].pos.getY());
-            punto2=new Point(this.mapa[this.recorrido.get(i+1).getX()][this.recorrido.get(i+1).getY()].pos.getX()
-                    ,this.mapa[this.recorrido.get(i+1).getX()][this.recorrido.get(i+1).getY()].pos.getY());
+                //defino dos puntos extremos
+                punto1=new Point(this.mapa[this.recorrido.get(i).getX()][this.recorrido.get(i).getY()].pos.getX()
+                        ,this.mapa[this.recorrido.get(i).getX()][this.recorrido.get(i).getY()].pos.getY());
+                punto2=new Point(this.mapa[this.recorrido.get(i+1).getX()][this.recorrido.get(i+1).getY()].pos.getX()
+                        ,this.mapa[this.recorrido.get(i+1).getX()][this.recorrido.get(i+1).getY()].pos.getY());
 
-            //tamaño de la punta de la flecha
-            dist=10;
+                //tamaño de la punta de la flecha
+                dist=10;
 
-            /* (la coordenadas de la ventana es al revez)
-                calculo de la variacion de "x" y "y" para hallar el angulo
-             **/
+                /* (la coordenadas de la ventana es al revez)
+                    calculo de la variacion de "x" y "y" para hallar el angulo
+                 **/
 
-            ty=-(punto1.y-punto2.y)*1.0;
-            tx=(punto1.x-punto2.x)*1.0;
-            //angulo
-            ang=Math.atan (ty/tx);
+                ty=-(punto1.y-punto2.y)*1.0;
+                tx=(punto1.x-punto2.x)*1.0;
+                //angulo
+                ang=Math.atan (ty/tx);
 
-            if(tx<0)
-            {// si tx es negativo aumentar 180 grados
-               ang+=Math.PI;
+                if(tx<0)
+                {// si tx es negativo aumentar 180 grados
+                   ang+=Math.PI;
+                }
+
+                //puntos de control para la punta
+                //p1 y p2 son los puntos de salida
+                Point p1=new Point(),p2=new Point(),punto=punto2;
+
+                //angulo de separacion
+                angSep=25.0;
+
+                p1.x=(int)(punto.x+dist*Math.cos (ang-Math.toRadians (angSep)));
+                p1.y=(int)(punto.y-dist*Math.sin (ang-Math.toRadians (angSep)));
+                p2.x=(int)(punto.x+dist*Math.cos (ang+Math.toRadians (angSep)));
+                p2.y=(int)(punto.y-dist*Math.sin (ang+Math.toRadians (angSep)));
+
+                Graphics2D g2D=(Graphics2D)g;
+
+                //dale color a la linea
+                g.setColor (Color.green);
+                // grosor de la linea
+                g2D.setStroke (new BasicStroke(2.2f));
+                //dibuja la linea de extremo a extremo
+                g.drawLine (punto1.x,punto1.y,punto.x,punto.y);
+                //dibujar la punta
+                g.drawLine (p1.x,p1.y,punto.x,punto.y);
+                g.drawLine (p2.x,p2.y,punto.x,punto.y);
+
+                g.setColor(Color.BLACK);
+                g.drawString(""+(i+1), (punto1.x+punto2.x)/2, (punto1.y+punto2.y)/2);
             }
-
-            //puntos de control para la punta
-            //p1 y p2 son los puntos de salida
-            Point p1=new Point(),p2=new Point(),punto=punto2;
-
-            //angulo de separacion
-            angSep=25.0;
-
-            p1.x=(int)(punto.x+dist*Math.cos (ang-Math.toRadians (angSep)));
-            p1.y=(int)(punto.y-dist*Math.sin (ang-Math.toRadians (angSep)));
-            p2.x=(int)(punto.x+dist*Math.cos (ang+Math.toRadians (angSep)));
-            p2.y=(int)(punto.y-dist*Math.sin (ang+Math.toRadians (angSep)));
-
-            Graphics2D g2D=(Graphics2D)g;
-
-            //dale color a la linea
-            g.setColor (Color.black);
-            // grosor de la linea
-            g2D.setStroke (new BasicStroke(2.2f));
-            //dibuja la linea de extremo a extremo
-            g.drawLine (punto1.x,punto1.y,punto.x,punto.y);
-            //dibujar la punta
-            g.drawLine (p1.x,p1.y,punto.x,punto.y);
-            g.drawLine (p2.x,p2.y,punto.x,punto.y);
-
-            g.drawString(""+(i+1), (punto1.x+punto2.x)/2, (punto1.y+punto2.y)/2);
         }
     }
 
     protected void dibujaLugaresInteres(Graphics g){
         int i;
-        g.setColor(Color.RED);
+        g.setColor(Color.red);
         for (i = 0; i < this.lugares.length; i++) {
             g.fillOval(mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getX(),
                     mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY(), 11, 11);        
@@ -563,7 +576,4 @@ public class AreaMapa extends javax.swing.JPanel{
         
 
     }
-
-
-
 }
