@@ -135,7 +135,7 @@ public class AreaMapa extends javax.swing.JPanel{
             setLugar(i);
         }
     }
-    
+
     public int setLugar(int i){
         int j,k;
 
@@ -146,7 +146,7 @@ public class AreaMapa extends javax.swing.JPanel{
                 //System.out.println("Ingreso: "+this.lugares[i]+" Buscando: "+this.mapa[j][k].getNombreLugar());
                 if(m.find()){
                     this.interLugares[i][0]=j;
-                    this.interLugares[i][1]=k;                   
+                    this.interLugares[i][1]=k;
                     return 0;
                 }
             }
@@ -188,7 +188,7 @@ public class AreaMapa extends javax.swing.JPanel{
     private void ordenarNavegacion(){
         int i,j,auxIndice=1,aux1,aux2;
         double dist1,dist2;
-        
+
         for (i = 1; i < lugares.length; i++) {
             dist1=this.distanciaEntre2pts(
                         this.mapa[this.interLugares[i-1][0]][this.interLugares[i-1][1]].pos.getX(),
@@ -229,7 +229,15 @@ public class AreaMapa extends javax.swing.JPanel{
         for(i=0;i<this.lugares.length;i++){
             ptoInicio = new Posicion(this.interLugares[i][0],this.interLugares[i][1]);
             ptoFin = new Posicion(this.interLugares[i+1][0],this.interLugares[i+1][1]);
+            System.out.println("Lugares De interes! ***Mapa["+ptoInicio.getX()+"]["+ptoInicio.getY()+"]--->>Mapa["+ptoFin.getX()+"]["+ptoFin.getY()+"]");
+//	        System.in.readline();
+
             while(!this.verifica(ptoInicio, ptoFin)){
+
+            	/*********************************************************************************************************************/
+    	       	/*********************************************************************************************************************/
+	           	System.out.println("Mapa["+ptoInicio.getX()+"]["+ptoInicio.getY()+"]--->>Mapa["+ptoFin.getX()+"]["+ptoFin.getY()+"]");
+
                 if(ptoFin.getX()-ptoInicio.getX()<0){//Pregunta si debe avanzar arriba
                     if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getNorte()){//preg. si puede avanzar arriba.
                         ptoInter = new Posicion(ptoInicio.getX()-1,ptoInicio.getY());
@@ -255,6 +263,9 @@ public class AreaMapa extends javax.swing.JPanel{
                                         this.recorrido.add(ptoInter);
                                         ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
                                     }
+                                    else{
+                                    	System.out.println("01Sin Salida Avanzar arriba!!!");
+                                    }
                                 }
                             }
                         }
@@ -277,6 +288,9 @@ public class AreaMapa extends javax.swing.JPanel{
                                             this.recorrido.add(ptoInter);
                                             ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
                                         }
+                                        else{
+                                    		System.out.println("02Sin Salida Avanzar debe avanzar derecha!!!");
+                                    	}
                                      }
                                 }
                             }
@@ -309,6 +323,9 @@ public class AreaMapa extends javax.swing.JPanel{
                                             this.recorrido.add(ptoInter);
                                             ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
                                         }
+                                        else{
+                                    		System.out.println("03Sin Salida Avanzar aabajo!!!");
+                                    	}
                                     }
                                 }
                             }
@@ -331,6 +348,9 @@ public class AreaMapa extends javax.swing.JPanel{
                                                 this.recorrido.add(ptoInter);
                                                 ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
                                             }
+                                            else{
+                                    			System.out.println("04Sin Salida Avanzar izquierda!!!");
+                                    		}
                                         }
                                     }
                                 }
@@ -339,6 +359,7 @@ public class AreaMapa extends javax.swing.JPanel{
                     }
                 }//Fin Arriba y abajo
                 /*****************************************/
+               System.out.println("Mapa["+ptoInicio.getX()+"]["+ptoInicio.getY()+"]--->>Mapa["+ptoFin.getX()+"]["+ptoFin.getY()+"]");
                 if(ptoFin.getY()-ptoInicio.getY()>0){//si debe ir Derecha
                     if(this.mapa[ptoInicio.getX()][ptoInicio.getY()].getEste()){//si puedo ir a derecha (este)
                         ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()+1);
@@ -364,6 +385,9 @@ public class AreaMapa extends javax.swing.JPanel{
                                         this.recorrido.add(ptoInter);
                                         ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
                                     }
+                                    else{
+                                    	System.out.println("05Sin Salida Avanzar arriba!!!");
+                                    }
                                 }
                             }
                         }
@@ -386,6 +410,9 @@ public class AreaMapa extends javax.swing.JPanel{
                                             this.recorrido.add(ptoInter);
                                             ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
                                         }//Fin if puede avanzar arriba
+                                        else{
+                                    		System.out.println("06Sin Salida Avanzar aabajo!!!");
+                                    	}
                                     }
                                 }
                             }
@@ -418,8 +445,11 @@ public class AreaMapa extends javax.swing.JPanel{
                                             ptoInter = new Posicion(ptoInicio.getX(),ptoInicio.getY()+1);
                                             this.recorrido.add(ptoInter);
                                             ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
-                                        }                                        
-                                    }                                    
+                                        }
+                                        else{
+                                    		System.out.println("07Sin Salida Avanzar arriba!!!");
+                                    	}
+                                    }
                                 }
                             }
                             else{
@@ -441,6 +471,9 @@ public class AreaMapa extends javax.swing.JPanel{
                                                 this.recorrido.add(ptoInter);
                                                 ptoInicio = new Posicion(ptoInter.getX(),ptoInter.getY());
                                             }//Fin if puede avanzar arriba
+                                            else{
+                                    			System.out.println("08Sin Salida Avanzar arriba!!!");
+                                    		}
                                          }
                                      }
                                  }
@@ -568,12 +601,26 @@ public class AreaMapa extends javax.swing.JPanel{
 
     protected void dibujaLugaresInteres(Graphics g){
         int i;
-        g.setColor(Color.red);
-        for (i = 0; i < this.lugares.length; i++) {
-            g.fillOval(mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getX(),
-                    mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY(), 11, 11);        
+
+        for (i = 0; i < this.lugares.length; i++){
+		if(i==0){
+			g.setColor(Color.red);
+			g.fillOval(mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getX(),
+                    		mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY(), 15, 15);
+			g.setColor(Color.yellow);
+			g.fillOval(mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getX()+3,
+                    		mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY()+3, 9, 9);
+//			System.out.println("Azul");
+		}
+		else{
+			g.setColor(Color.red);
+//			System.out.println("Rojo");
+			g.fillOval(mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getX(),
+                    		mapa[this.interLugares[i][0]][this.interLugares[i][1]].pos.getY(), 11, 11);
+		}
+
         }
-        
+
 
     }
 }
